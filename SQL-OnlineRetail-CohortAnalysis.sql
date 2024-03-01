@@ -2,6 +2,8 @@
 -- Temporary Tables Creation, Window Functions (ROW_NUMBER()), JOINs on Temp Tables, 
 -- Data Transformation and Calculation, PIVOT Function, Data Presentation and Reporting
 
+-- create database from CSV file
+
 USE master;
 GO
 
