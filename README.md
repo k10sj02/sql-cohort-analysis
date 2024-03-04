@@ -18,10 +18,12 @@ This cohort started with 885 customers (100% retention), and 324 made additional
 2. **Scan Vertically (Columns):** Allows us to compare retention rates for various cohorts within a specific period. Visually scan, looking for columns with similar shades that decrease in intensity (lighter) in subsequent months. This signifies declining retention rates. 
 - **Insight:**: For example, in this case, we see that the first two months after the initial purchase shows the most dramatic drop in retention so maybe developing a loyalty campaign around these months may address and halt this trend. In addition, we see that the e-commerce platform acquired far less first-time customers in Dec '11 than it did in Dec '10. Maybe we have exhausted our total addressable market (TAM) or maybe our acquisition strategies are no longer effective. This begs further investigation. 
 
-1. **Scan Diagonally:** Analyze specific month retention rates across all cohorts (e.g., comparing November or Cohort Index 12 retention rates across all cohorts). 
+3. **Scan Diagonally:** Analyze specific month retention rates across all cohorts (e.g., comparing November or Cohort Index 12 retention rates across all cohorts). 
 - **Insight:**: Sales in November rise relative to the previous period, revealing a November sales surge observed across all cohorts. This could be due to seasonal factors (perhaps, Thanksgiving or holiday shopping) or a successful marketing campaigns. As an analyst, these insights may fuel further investigation and optimization.
 
-Note: In cohort analysis, you can ignore the last cell since it's the current month i.e. a partial time period. Since the current month is ongoing, data may not be complete or representative of that period. Cohort analyses become even more powerful when drill down further into a specific attribute. For example, what if we identified that a targeted campaign promoting abandoned carts drove the increase in November sales? We could run another cohort analysis for returning customers that received mobile push notifications or emails. This can help us determine which strategy was more effective.
+_**Note**: In cohort analysis, you can ignore the last cell since it's the current month i.e. a partial time period. Since the current month is ongoing, data may not be complete or representative of that period._
+
+Cohort analyses become even more powerful when drill down further into a specific attribute. For example, what if we identified that a targeted campaign promoting abandoned carts drove the increase in November sales? We could run another cohort analysis for returning customers that received mobile push notifications or emails. This can help us determine which strategy was more effective.
 
 **Combining Insights and Identifying Opportunities:**
 
