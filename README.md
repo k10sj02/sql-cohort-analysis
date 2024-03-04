@@ -5,6 +5,8 @@ This repository contains a comprehensive SQL script for analyzing data from an o
 
 # Demystifying the Cohort Table: A Guide to Unlocking Customer Insights
 
+![Dashboard 1 (1)](https://github.com/k10sj02/sql-cohort-analysis/assets/35823259/cac0136b-295b-4437-86d0-27b70e048df2)
+
 **Understanding the Cohort Table: A Step-by-Step Guide**
 
 Cohort tables offer valuable insights into customer behavior by grouping them based on shared attributes, in this case, acquisition date or date of first purchase. Learning to read these tables can be tricky at first but effectively empowers you to analyze customer engagement, retention, and acquisition trends.
@@ -35,6 +37,3 @@ Cohort analyses become even more powerful when drill down further into a specifi
 * **Generalizability:** Cohort analysis focuses on specific groups with shared characteristics, and the derived insights may not be universally applicable to broader contexts.
 
 By mastering cohort table interpretation, you gain a powerful tool to decipher customer behavior and make informed business decisions, ultimately leading to improved customer engagement and retention.
-
-
-![Dashboard 1 (1)](https://github.com/k10sj02/sql-cohort-analysis/assets/35823259/cac0136b-295b-4437-86d0-27b70e048df2)
