@@ -5,6 +5,7 @@ import numpy as np
 import plotly.graph_objects as go
 import plotly.express as px
 from io import BytesIO
+import joblib
 
 # ─── Page config ────────────────────────────────────────────────────────────
 st.set_page_config(
@@ -46,48 +47,29 @@ st.markdown(
 )
 
 
-# ─── Data loading & caching ──────────────────────────────────────────────────
-@st.cache_data(show_spinner="Loading dataset…")
-def load_data(path: str) -> pd.DataFrame:
-    df = pd.read_excel(path, dtype={"CustomerID": str})
-    df.columns = df.columns.str.strip()
-    return df
+# ─── Data loading — reads pre-built joblib cache only ───────────────────────
+CACHE_DIR = Path(__file__).parent / ".cache"
 
 
-@st.cache_data(show_spinner="Running cohort analysis…")
-def build_cohort_tables(df_raw: pd.DataFrame):
-    # ── Clean ────────────────────────────────────────────────────────────────
-    df = df_raw.copy()
-    df = df[df["CustomerID"].notna()]
-    df = df[df["Quantity"] > 0]
-    df = df[df["UnitPrice"] > 0]
-    df["InvoiceDate"] = pd.to_datetime(df["InvoiceDate"])
-    # Deduplicate
-    df = df.drop_duplicates(subset=["InvoiceNo", "StockCode", "Quantity"])
-
-    # ── Cohort date (first purchase month) ──────────────────────────────────
-    df["CohortDate"] = (
-        df.groupby("CustomerID")["InvoiceDate"].transform("min").dt.to_period("M")
+@st.cache_resource(show_spinner="Loading cached data…")
+def load_all():
+    missing = [
+        f
+        for f in ["df", "cohort_pivot", "retention", "cohort_size"]
+        if not (CACHE_DIR / f"{f}.joblib").exists()
+    ]
+    if missing:
+        st.error(
+            f"Cache files missing: {missing}. Run `uv run python preprocess.py` first.",
+            icon="🚨",
+        )
+        st.stop()
+    return (
+        joblib.load(CACHE_DIR / "df.joblib"),
+        joblib.load(CACHE_DIR / "cohort_pivot.joblib"),
+        joblib.load(CACHE_DIR / "retention.joblib"),
+        joblib.load(CACHE_DIR / "cohort_size.joblib"),
     )
-    df["InvoicePeriod"] = df["InvoiceDate"].dt.to_period("M")
-    df["CohortIndex"] = (
-        (df["InvoicePeriod"].dt.year - df["CohortDate"].dt.year) * 12
-        + (df["InvoicePeriod"].dt.month - df["CohortDate"].dt.month)
-        + 1
-    )
-
-    # ── Pivot: absolute ──────────────────────────────────────────────────────
-    cohort_pivot = (
-        df.groupby(["CohortDate", "CohortIndex"])["CustomerID"]
-        .nunique()
-        .unstack("CohortIndex")
-    )
-
-    # ── Pivot: retention % ──────────────────────────────────────────────────
-    cohort_size = cohort_pivot[1]
-    retention = cohort_pivot.divide(cohort_size, axis=0) * 100
-
-    return df, cohort_pivot, retention, cohort_size
 
 
 def compute_kpis(df: pd.DataFrame, cohort_size: pd.Series):
@@ -289,7 +271,6 @@ def to_excel(abs_df: pd.DataFrame, pct_df: pd.DataFrame) -> bytes:
 
 
 # ─── Layout ──────────────────────────────────────────────────────────────────
-DATA_PATH = Path(__file__).parent / "Online Retail.xlsx"
 
 with st.sidebar:
     st.markdown("## ⚙️ Controls")
@@ -315,8 +296,7 @@ with st.sidebar:
     st.caption("Data: UCI Online Retail Dataset")
 
 # ── Load & process ────────────────────────────────────────────────────────────
-df_raw = load_data(DATA_PATH)
-df, cohort_pivot, retention, cohort_size = build_cohort_tables(df_raw)
+df, cohort_pivot, retention, cohort_size = load_all()
 kpis = compute_kpis(df, cohort_size)
 
 # Trim to selected max index
