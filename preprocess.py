@@ -8,8 +8,9 @@ import pandas as pd
 import joblib
 
 DATA_PATH = Path(__file__).parent / "Online Retail.xlsx"
-CACHE_DIR = Path(__file__).parent / ".cache"
-CACHE_DIR.mkdir(exist_ok=True)
+CACHE_DIR = Path(__file__).parent / "data" / "processed"
+CACHE_DIR.mkdir(parents=True, exist_ok=True)
+
 
 def main():
     print("📦 Reading Excel file…")
@@ -25,9 +26,7 @@ def main():
 
     print("🔢 Building cohort index…")
     df["CohortDate"] = (
-        df.groupby("CustomerID")["InvoiceDate"]
-        .transform("min")
-        .dt.to_period("M")
+        df.groupby("CustomerID")["InvoiceDate"].transform("min").dt.to_period("M")
     )
     df["InvoicePeriod"] = df["InvoiceDate"].dt.to_period("M")
     df["CohortIndex"] = (
@@ -46,13 +45,14 @@ def main():
     retention = cohort_pivot.divide(cohort_size, axis=0) * 100
 
     print("💾 Saving to .cache/…")
-    joblib.dump(df,            CACHE_DIR / "df.joblib")
-    joblib.dump(cohort_pivot,  CACHE_DIR / "cohort_pivot.joblib")
-    joblib.dump(retention,     CACHE_DIR / "retention.joblib")
-    joblib.dump(cohort_size,   CACHE_DIR / "cohort_size.joblib")
+    joblib.dump(df, CACHE_DIR / "df.joblib")
+    joblib.dump(cohort_pivot, CACHE_DIR / "cohort_pivot.joblib")
+    joblib.dump(retention, CACHE_DIR / "retention.joblib")
+    joblib.dump(cohort_size, CACHE_DIR / "cohort_size.joblib")
 
     print(f"✅ Done. Cached {len(df):,} rows across {len(cohort_size)} cohorts.")
     print(f"   Files written to {CACHE_DIR.resolve()}")
+
 
 if __name__ == "__main__":
     main()

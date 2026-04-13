@@ -48,7 +48,7 @@ st.markdown(
 
 
 # ─── Data loading — reads pre-built joblib cache only ───────────────────────
-CACHE_DIR = Path(__file__).parent / ".cache"
+CACHE_DIR = Path(__file__).parent / "data" / "processed"
 
 
 @st.cache_resource(show_spinner="Loading cached data…")
