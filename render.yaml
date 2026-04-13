@@ -3,8 +3,8 @@ services:
     name: sql-cohort-analysis
     runtime: python
     rootDir: .
-    buildCommand: pip install uv && uv sync
-    startCommand: uv run streamlit run app.py --server.port 10000 --server.address 0.0.0.0
+    buildCommand: pip install uv && uv sync && uv run python preprocess.py
+    startCommand: uv run streamlit run app.py --server.port 10000 --server.address 0.0.0.0address 0.0.0.0
     envVars:
       - key: PYTHON_VERSION
         value: 3.11.11
