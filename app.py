@@ -281,8 +281,7 @@ with st.sidebar:
     )
     st.markdown("---")
     st.markdown("### 📖 How to read this")
-    st.markdown(
-        """
+    st.markdown("""
 **Horizontally →** Track a single cohort's retention over time.
 
 **Vertically ↓** Compare cohorts at the same age.
@@ -290,8 +289,7 @@ with st.sidebar:
 **Diagonally ↘** Spot calendar-driven spikes (e.g. holiday season).
 
 *Index 1 = month of first purchase (always 100%).*
-    """
-    )
+    """)
     st.markdown("---")
     st.caption("Data: UCI Online Retail Dataset")
 
@@ -361,7 +359,7 @@ with tab1:
                 is_pct=True,
                 colorscale=colorscale,
             ),
-            width="stretch",
+            use_container_width=True,
         )
     with col_b:
         st.plotly_chart(
@@ -371,7 +369,7 @@ with tab1:
                 is_pct=False,
                 colorscale="Blues",
             ),
-            width="stretch",
+            use_container_width=True,
         )
 
     st.markdown("#### 💡 Key Insights")
@@ -393,7 +391,7 @@ with tab1:
             st.markdown(
                 f"""<div class="insight-box">
                 <strong>November Surge (Index 12)</strong><br>
-                Index 12 averages <strong>{nov_avg:.0f}%</strong> — higher than surrounding months, 
+                Index 12 averages <strong>{nov_avg:.0f}%</strong> — higher than surrounding months,
                 consistent with holiday/Thanksgiving lift.
             </div>""",
                 unsafe_allow_html=True,
@@ -405,8 +403,8 @@ with tab1:
         st.markdown(
             f"""<div class="insight-box">
             <strong>Acquisition Trend</strong><br>
-            New customer acquisition shifted from <strong>{first_cohort_size:,}</strong> 
-            (Dec '10) to <strong>{last_cohort_size:,}</strong> (Dec '11) — a 
+            New customer acquisition shifted from <strong>{first_cohort_size:,}</strong>
+            (Dec '10) to <strong>{last_cohort_size:,}</strong> (Dec '11) — a
             <strong>{delta:+.0f}%</strong> change worth investigating.
         </div>""",
             unsafe_allow_html=True,
@@ -426,17 +424,17 @@ with tab2:
     with col_left:
         st.plotly_chart(
             make_retention_lines(retention_trimmed, selected_periods),
-            width="stretch",
+            use_container_width=True,
         )
     with col_right:
         st.plotly_chart(
-            make_avg_retention_bar(retention_trimmed), width="stretch"
+            make_avg_retention_bar(retention_trimmed), use_container_width=True
         )
 
 with tab3:
     col_x, col_y = st.columns([3, 2])
     with col_x:
-        st.plotly_chart(make_cohort_size_bar(cohort_size), width="stretch")
+        st.plotly_chart(make_cohort_size_bar(cohort_size), use_container_width=True)
     with col_y:
         st.markdown("#### Cohort Size Summary")
         size_df = cohort_size.rename("New Customers").reset_index()
@@ -445,7 +443,7 @@ with tab3:
             size_df["New Customers"] / size_df["New Customers"].sum() * 100
         ).round(1)
         st.dataframe(
-            size_df.set_index("Cohort Period"), width="stretch", height=320
+            size_df.set_index("Cohort Period"), use_container_width=True, height=320
         )
 
 # ── Raw data & export ─────────────────────────────────────────────────────────
@@ -457,10 +455,10 @@ with st.expander("🗂  Raw Cohort Tables"):
             retention_trimmed.round(1).style.background_gradient(
                 cmap="RdYlGn", vmin=0, vmax=100
             ),
-            width="stretch",
+            use_container_width=True,
         )
     with t2:
-        st.dataframe(pivot_trimmed.fillna("").astype(str), width="stretch")
+        st.dataframe(pivot_trimmed.fillna("").astype(str), use_container_width=True)
 
 excel_bytes = to_excel(pivot_trimmed, retention_trimmed)
 st.download_button(
@@ -471,6 +469,4 @@ st.download_button(
 )
 
 st.markdown("<br><br>", unsafe_allow_html=True)
-st.caption(
-    "Built with Streamlit · Plotly · Pandas | Data: UCI ML Repository — Online Retail Dataset"
-)
+st.caption("Built by Stann-Omar Jones")
