@@ -361,7 +361,7 @@ with tab1:
                 is_pct=True,
                 colorscale=colorscale,
             ),
-            use_container_width=True,
+            width="stretch",
         )
     with col_b:
         st.plotly_chart(
@@ -371,7 +371,7 @@ with tab1:
                 is_pct=False,
                 colorscale="Blues",
             ),
-            use_container_width=True,
+            width="stretch",
         )
 
     st.markdown("#### 💡 Key Insights")
@@ -426,17 +426,17 @@ with tab2:
     with col_left:
         st.plotly_chart(
             make_retention_lines(retention_trimmed, selected_periods),
-            use_container_width=True,
+            width="stretch",
         )
     with col_right:
         st.plotly_chart(
-            make_avg_retention_bar(retention_trimmed), use_container_width=True
+            make_avg_retention_bar(retention_trimmed), width="stretch"
         )
 
 with tab3:
     col_x, col_y = st.columns([3, 2])
     with col_x:
-        st.plotly_chart(make_cohort_size_bar(cohort_size), use_container_width=True)
+        st.plotly_chart(make_cohort_size_bar(cohort_size), width="stretch")
     with col_y:
         st.markdown("#### Cohort Size Summary")
         size_df = cohort_size.rename("New Customers").reset_index()
@@ -445,7 +445,7 @@ with tab3:
             size_df["New Customers"] / size_df["New Customers"].sum() * 100
         ).round(1)
         st.dataframe(
-            size_df.set_index("Cohort Period"), use_container_width=True, height=320
+            size_df.set_index("Cohort Period"), width="stretch", height=320
         )
 
 # ── Raw data & export ─────────────────────────────────────────────────────────
@@ -457,10 +457,10 @@ with st.expander("🗂  Raw Cohort Tables"):
             retention_trimmed.round(1).style.background_gradient(
                 cmap="RdYlGn", vmin=0, vmax=100
             ),
-            use_container_width=True,
+            width="stretch",
         )
     with t2:
-        st.dataframe(pivot_trimmed.fillna("").astype(str), use_container_width=True)
+        st.dataframe(pivot_trimmed.fillna("").astype(str), width="stretch")
 
 excel_bytes = to_excel(pivot_trimmed, retention_trimmed)
 st.download_button(
